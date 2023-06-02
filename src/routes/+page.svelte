@@ -82,16 +82,16 @@
 	}
 
 	function parseInput(input: string) {
-		// Testing for Hex
-		let match = input.match(/([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})\b/);
-		if (match) {
-			return `#${match[0]}`;
-		}
-
 		// Testing for RGB
-		match = input.match(/(\d+)\D+(\d+)\D+(\d+)/);
+		let match = input.match(/(\d+)\D+(\d+)\D+(\d+)/);
 		if (match) {
 			return rgbToHex(parseInt(match[1]), parseInt(match[2]), parseInt(match[3]));
+		}
+
+		// Testing for Hex
+		match = input.match(/([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})\b/);
+		if (match) {
+			return `#${match[0]}`;
 		}
 
 		return '';
