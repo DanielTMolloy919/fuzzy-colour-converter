@@ -170,7 +170,7 @@
 	<h1 class="text-4xl">Fuzzy Colour Converter</h1>
 	<input
 		class="mt-6 text-md block px-3 py-2 rounded-lg w-full
-	bg-white border-2 border-gray-300 placeholder-gray-600 shadow-md focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none"
+	bg-white border-2 border-gray-300 placeholder-gray-300 shadow-md focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none"
 		placeholder="Paste whatever..."
 		bind:value={input}
 	/>
