@@ -91,7 +91,14 @@
 		// Testing for Hex
 		match = input.match(/([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})\b/);
 		if (match) {
-			return `#${match[0]}`;
+			let hex = match[0];
+			if (hex.length === 3) {
+				hex = hex
+					.split('')
+					.map((char) => char + char)
+					.join('');
+			}
+			return `#${hex}`;
 		}
 
 		return '';
