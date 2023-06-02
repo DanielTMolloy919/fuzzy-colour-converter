@@ -82,12 +82,10 @@
 	}
 
 	function parseInput(input: string) {
-		const whitespace_removed = input.replace(/\s/g, '');
-
 		// Testing for Hex
-		let match = input.match(/#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})\b/);
+		let match = input.match(/([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})\b/);
 		if (match) {
-			return match[0];
+			return `#${match[0]}`;
 		}
 
 		// Testing for RGB
