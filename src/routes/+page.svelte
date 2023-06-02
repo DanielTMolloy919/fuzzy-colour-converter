@@ -44,11 +44,14 @@
 			r = parseInt('0x' + hex[1] + hex[1]);
 			g = parseInt('0x' + hex[2] + hex[2]);
 			b = parseInt('0x' + hex[3] + hex[3]);
-		} else if (hex.length == 7) {
+		} else {
 			r = parseInt('0x' + hex[1] + hex[2]);
 			g = parseInt('0x' + hex[3] + hex[4]);
 			b = parseInt('0x' + hex[5] + hex[6]);
 		}
+
+		const a = hex.length === 9 ? parseInt(hex.slice(7, 9), 16) / 255 : null;
+
 		// Then to HSL
 		r /= 255;
 		g /= 255;
@@ -74,7 +77,7 @@
 		s = +(s * 100).toFixed(1);
 		l = +(l * 100).toFixed(1);
 
-		return `${h}, ${s}%, ${l}%`;
+		return a ? `${h}, ${s}%, ${l}%, ${a.toFixed(2)}` : `${h}, ${s}%, ${l}%`;
 	}
 
 	function parseInput(input: string) {
@@ -154,12 +157,16 @@
 	$: javascript_rgb = parsed_hex
 		? `${javascript_rgb_prefix}(${parsed_rgb.replaceAll(' ', '')})`
 		: '';
-	$: javascript_hsl = parsed_hex ? `hsl(${parsed_hsl.replaceAll(' ', '')})` : '';
+
+	$: javascript_hsl_prefix = parsed_hex.length === 9 ? 'hsla' : 'hsl';
+	$: javascript_hsl = parsed_hex
+		? `${javascript_hsl_prefix}(${parsed_hsl.replaceAll(' ', '')})`
+		: '';
 
 	$: preview_background = parsed_hex ? `${parsed_hex}` : 'white';
 </script>
 
-<main class="flex min-h-screen flex-col items-center p-12 max-w-3xl m-auto">
+<main class="flex min-h-screen flex-col items-center p-12 max-w-4xl m-auto">
 	<h1 class="text-4xl">Fuzzy Colour Converter</h1>
 	<input
 		class="mt-6 text-md block px-3 py-2 rounded-lg w-full
@@ -180,12 +187,6 @@
 			</div>
 		</div>
 		<div use:copy={parsed_rgb} class="relative">
-			<!-- <div
-				class="absolute top-2 right-24 bg-gray-800 text-gray-200 px-2 py-1 rounded"
-				style="z-index: 999"
-			>
-				Copied!
-			</div> -->
 			<h1 class="mt-3 text-xl">RGB</h1>
 			<div
 				class="text-md px-3 py-2 rounded-lg w-full h-10 bg-gray-300 hover:bg-gray-200 focus:bg-pink-400 transition-colors cursor-pointer flex items-center justify-between"
@@ -197,12 +198,6 @@
 			</div>
 		</div>
 		<div use:copy={parsed_hsl} class="relative">
-			<!-- <div
-				class="absolute top-2 right-24 bg-gray-800 text-gray-200 px-2 py-1 rounded"
-				style="z-index: 999"
-			>
-				Copied!
-			</div> -->
 			<h1 class="mt-3 text-xl">HSL</h1>
 			<div
 				class="text-md px-3 py-2 rounded-lg w-full h-10 bg-gray-300 hover:bg-gray-200 focus:bg-pink-400 transition-colors cursor-pointer flex items-center justify-between"
@@ -237,7 +232,6 @@
 			</div>
 		</div>
 	</div>
-	<!-- border-2 border-gray-400  -->
 	<div
 		class="rounded-2xl h-40 w-40 rounded-box bg-white mt-10 color-preview shadow-lg"
 		style="background-color: {preview_background}"
