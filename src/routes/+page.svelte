@@ -105,10 +105,13 @@
 	$: parsed_rgb = hexToRgb(parsed_hex);
 	$: parsed_hsl = parsed_hex ? hexToHsl(parsed_hex) : '';
 
+	$: javascript_rgb = parsed_hex ? `rgb(${parsed_rgb.replaceAll(' ', '')})` : '';
+	$: javascript_hsl = parsed_hex ? `hsl(${parsed_hsl.replaceAll(' ', '')})` : '';
+
 	$: preview_background = parsed_hex ? `${parsed_hex}` : 'white';
 </script>
 
-<main class="flex min-h-screen flex-col items-center p-12 max-w-2xl m-auto">
+<main class="flex min-h-screen flex-col items-center p-12 max-w-3xl m-auto">
 	<h1 class="text-4xl">Fuzzy Colour Converter</h1>
 	<input
 		class="mt-6 text-md block px-3 py-2 rounded-lg w-full
@@ -116,7 +119,7 @@
 		placeholder="Paste whatever..."
 		bind:value={input}
 	/>
-	<div class="grid grid-cols-2 gap-4 w-full">
+	<div class="grid grid-cols-3 gap-4 w-full">
 		<div use:copy={parsed_hex}>
 			<h1 class="mt-3 text-xl">Hexadecimal</h1>
 			<div
@@ -152,11 +155,34 @@
 			>
 				Copied!
 			</div> -->
-			<h1 class="mt text-xl">HSL</h1>
+			<h1 class="mt-3 text-xl">HSL</h1>
 			<div
 				class="text-md px-3 py-2 rounded-lg w-full h-10 bg-gray-300 hover:bg-gray-200 focus:bg-pink-400 transition-colors cursor-pointer flex items-center justify-between"
 			>
 				{parsed_hsl}
+				<div class="ml-auto">
+					<Clipboard size="20" />
+				</div>
+			</div>
+		</div>
+		<div />
+		<div use:copy={javascript_rgb} class="relative">
+			<h1 class="mt-3 text-l text-gray-400">For CSS</h1>
+			<div
+				class="text-md px-3 py-2 rounded-lg w-full h-10 bg-gray-300 hover:bg-gray-200 focus:bg-pink-400 transition-colors cursor-pointer flex items-center justify-between"
+			>
+				{javascript_rgb}
+				<div class="ml-auto">
+					<Clipboard size="20" />
+				</div>
+			</div>
+		</div>
+		<div use:copy={javascript_hsl} class="relative">
+			<h1 class="mt-3 text-l text-gray-400">For CSS</h1>
+			<div
+				class="text-md px-3 py-2 rounded-lg w-full h-10 bg-gray-300 hover:bg-gray-200 focus:bg-pink-400 transition-colors cursor-pointer flex items-center justify-between"
+			>
+				{javascript_hsl}
 				<div class="ml-auto">
 					<Clipboard size="20" />
 				</div>
@@ -173,5 +199,8 @@
 <style lang="postcss">
 	:global(html) {
 		background-color: theme(colors.gray.100);
+	}
+	.test {
+		background-color: rgb(0, 169, 79);
 	}
 </style>
