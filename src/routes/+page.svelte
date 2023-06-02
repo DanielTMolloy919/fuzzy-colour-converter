@@ -2,15 +2,19 @@
 	import { Clipboard } from 'lucide-svelte';
 	import { copy } from 'svelte-copy';
 
-	function rgbToHex(red: number, green: number, blue: number) {
-		if (red < 0 || red > 255 || green < 0 || green > 255 || blue < 0 || blue > 255) {
+	function rgbToHex(red: number, green: number, blue: number, alpha = 1) {
+		if (
+			red < 0 ||
+			red > 255 ||
+			green < 0 ||
+			green > 255 ||
+			blue < 0 ||
+			blue > 255 ||
+			alpha < 0 ||
+			alpha > 1
+		) {
 			return '';
 		}
-
-		// Ensure the input values are within the valid range of 0-255
-		red = Math.max(0, Math.min(255, red));
-		green = Math.max(0, Math.min(255, green));
-		blue = Math.max(0, Math.min(255, blue));
 
 		// Convert each component to its hexadecimal representation
 		let redHex = red.toString(16).padStart(2, '0');
@@ -18,25 +22,30 @@
 		let blueHex = blue.toString(16).padStart(2, '0');
 
 		// Concatenate the components and return the hex color string
-		return `#${redHex}${greenHex}${blueHex}`;
+		let hex_colour = `#${redHex}${greenHex}${blueHex}`;
+
+		if (alpha !== 1) {
+			let alphaHex = Math.round(alpha * 255)
+				.toString(16)
+				.padStart(2, '0');
+			hex_colour += alphaHex;
+		}
+
+		return hex_colour;
 	}
 
 	function hexToRgb(hex: string) {
 		// Remove the # symbol if present
 		hex = hex.replace('#', '');
 
-		// Check if the hex value is valid
-		if (!/^[0-9A-Fa-f]{6}$/.test(hex)) {
-			return '';
-		}
-
 		// Extract the RGB components
 		const r = parseInt(hex.slice(0, 2), 16);
 		const g = parseInt(hex.slice(2, 4), 16);
 		const b = parseInt(hex.slice(4, 6), 16);
+		const a = hex.length === 8 ? parseInt(hex.slice(6, 8), 16) : null;
 
 		// Return the RGB values as an object
-		return `${r}, ${g}, ${b}`;
+		return a ? `${r}, ${g}, ${b}, ${a}` : `${r}, ${g}, ${b}`;
 	}
 
 	function hexToHsl(hex: string) {
@@ -89,7 +98,7 @@
 		}
 
 		// Testing for Hex
-		match = input.match(/([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})\b/);
+		match = input.match(/([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})\b/);
 		if (match) {
 			let hex = match[0];
 			if (hex.length === 3) {
@@ -97,6 +106,9 @@
 					.split('')
 					.map((char) => char + char)
 					.join('');
+			}
+			if (hex.length === 8 && hex.slice(6, 8) == 'ff') {
+				hex = hex.slice(0, 6);
 			}
 			return `#${hex}`;
 		}
@@ -107,7 +119,7 @@
 	let input = '';
 
 	$: parsed_hex = parseInput(input);
-	$: parsed_rgb = hexToRgb(parsed_hex);
+	$: parsed_rgb = parsed_hex ? hexToRgb(parsed_hex) : '';
 	$: parsed_hsl = parsed_hex ? hexToHsl(parsed_hex) : '';
 
 	$: javascript_rgb = parsed_hex ? `rgb(${parsed_rgb.replaceAll(' ', '')})` : '';
