@@ -94,7 +94,6 @@
 			const red = parseInt(match[1]);
 			const green = parseInt(match[2]);
 			const blue = parseInt(match[3]);
-			console.log(match[4]);
 			const alpha = parseFloat(match[4]);
 
 			if (
@@ -243,6 +242,15 @@
 		class="rounded-2xl h-40 w-40 rounded-box bg-white mt-10 color-preview shadow-lg"
 		style="background-color: {preview_background}"
 	/>
+
+	<hr class="mt-8 mb-4 border-gray-300 w-full" />
+	<div class="flex text-sm text-gray-700 text-center justify-between w-full">
+		<div>Made by Daniel Molloy</div>
+		<a
+			class="p-2 hover:bg-gray-700 hover:text-gray-200 transition-colors rounded-lg"
+			href="https://github.com/DanielTMolloy919/fuzzy-colour-converter">Find on Github</a
+		>
+	</div>
 </main>
 
 <style lang="postcss">
