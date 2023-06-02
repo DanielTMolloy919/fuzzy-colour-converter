@@ -3,19 +3,6 @@
 	import { copy } from 'svelte-copy';
 
 	function rgbToHex(red: number, green: number, blue: number, alpha = 1) {
-		if (
-			red < 0 ||
-			red > 255 ||
-			green < 0 ||
-			green > 255 ||
-			blue < 0 ||
-			blue > 255 ||
-			alpha < 0 ||
-			alpha > 1
-		) {
-			return '';
-		}
-
 		// Convert each component to its hexadecimal representation
 		let redHex = red.toString(16).padStart(2, '0');
 		let greenHex = green.toString(16).padStart(2, '0');
@@ -42,10 +29,10 @@
 		const r = parseInt(hex.slice(0, 2), 16);
 		const g = parseInt(hex.slice(2, 4), 16);
 		const b = parseInt(hex.slice(4, 6), 16);
-		const a = hex.length === 8 ? parseInt(hex.slice(6, 8), 16) : null;
+		const a = hex.length === 8 ? parseInt(hex.slice(6, 8), 16) / 255 : null;
 
 		// Return the RGB values as an object
-		return a ? `${r}, ${g}, ${b}, ${a}` : `${r}, ${g}, ${b}`;
+		return a ? `${r}, ${g}, ${b}, ${a.toFixed(2)}` : `${r}, ${g}, ${b}`;
 	}
 
 	function hexToHsl(hex: string) {
@@ -91,14 +78,59 @@
 	}
 
 	function parseInput(input: string) {
-		// Testing for RGB
-		let match = input.match(/(\d+)\D+(\d+)\D+(\d+)/);
+		// Testing for Hex 8
+		let match = input.match(/\b([A-Fa-f0-9]{8})\b/);
 		if (match) {
-			return rgbToHex(parseInt(match[1]), parseInt(match[2]), parseInt(match[3]));
+			let hex = match[0];
+			if (hex.slice(6, 8) == 'ff') {
+				hex = hex.slice(0, 6);
+			}
+			return `#${hex}`;
 		}
 
-		// Testing for Hex
-		match = input.match(/([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})\b/);
+		// Testing for RGBA
+		match = input.match(/(\d+)\D+(\d+)\D+(\d+)\D+(\d+\.\d+)/);
+		if (match) {
+			const red = parseInt(match[1]);
+			const green = parseInt(match[2]);
+			const blue = parseInt(match[3]);
+			console.log(match[4]);
+			const alpha = parseFloat(match[4]);
+
+			if (
+				red >= 0 &&
+				red <= 255 &&
+				green >= 0 &&
+				green <= 255 &&
+				blue >= 0 &&
+				blue <= 255 &&
+				alpha >= 0 &&
+				alpha <= 1
+			) {
+				return rgbToHex(red, green, blue, alpha);
+			}
+		}
+
+		// Testing for Hex 6
+		match = input.match(/\b([A-Fa-f0-9]{6})\b/);
+		if (match) {
+			return `#${match[0]}`;
+		}
+
+		// Testing for RGB
+		match = input.match(/(\d+)\D+(\d+)\D+(\d+)/);
+		if (match) {
+			const red = parseInt(match[1]);
+			const green = parseInt(match[2]);
+			const blue = parseInt(match[3]);
+
+			if (red >= 0 && red <= 255 && green >= 0 && green <= 255 && blue >= 0 && blue <= 255) {
+				return rgbToHex(red, green, blue);
+			}
+		}
+
+		// Testing for Hex 3
+		match = input.match(/\b([A-Fa-f0-9]{3})\b/);
 		if (match) {
 			let hex = match[0];
 			if (hex.length === 3) {
@@ -106,9 +138,6 @@
 					.split('')
 					.map((char) => char + char)
 					.join('');
-			}
-			if (hex.length === 8 && hex.slice(6, 8) == 'ff') {
-				hex = hex.slice(0, 6);
 			}
 			return `#${hex}`;
 		}
@@ -122,7 +151,10 @@
 	$: parsed_rgb = parsed_hex ? hexToRgb(parsed_hex) : '';
 	$: parsed_hsl = parsed_hex ? hexToHsl(parsed_hex) : '';
 
-	$: javascript_rgb = parsed_hex ? `rgb(${parsed_rgb.replaceAll(' ', '')})` : '';
+	$: javascript_rgb_prefix = parsed_hex.length === 9 ? 'rgba' : 'rgb';
+	$: javascript_rgb = parsed_hex
+		? `${javascript_rgb_prefix}(${parsed_rgb.replaceAll(' ', '')})`
+		: '';
 	$: javascript_hsl = parsed_hex ? `hsl(${parsed_hsl.replaceAll(' ', '')})` : '';
 
 	$: preview_background = parsed_hex ? `${parsed_hex}` : 'white';
@@ -216,8 +248,5 @@
 <style lang="postcss">
 	:global(html) {
 		background-color: theme(colors.gray.100);
-	}
-	.test {
-		background-color: rgb(0, 169, 79);
 	}
 </style>
