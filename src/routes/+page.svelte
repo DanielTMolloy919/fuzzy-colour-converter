@@ -17,10 +17,15 @@
 	function parseInput(input: string) {
 		const whitespace_removed = input.replace(/\s/g, '');
 
-		// Testing for RGB
-		let match = input.match(/(\d+)\D+(\d+)\D+(\d+)/);
+		// Testing for Hex
+		let match = input.match(/#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})\b/);
 		if (match) {
-			console.log(match[1], match[2], match[3]);
+			return match[0];
+		}
+
+		// Testing for RGB
+		match = input.match(/(\d+)\D+(\d+)\D+(\d+)/);
+		if (match) {
 			return rgbToHex(parseInt(match[1]), parseInt(match[2]), parseInt(match[3]));
 		}
 
