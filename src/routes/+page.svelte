@@ -30,6 +30,8 @@
 	let input = '';
 
 	$: parsed_hex = parseInput(input);
+
+	$: preview_background = parsed_hex ? `${parsed_hex}` : 'white';
 </script>
 
 <main class="flex min-h-screen flex-col items-center p-12 max-w-2xl m-auto">
@@ -45,6 +47,10 @@
 	>
 		{parsed_hex}
 	</p>
+	<div
+		class="rounded-lg h-40 w-40 rounded-box bg-white mt-10 border-2 border-gray-400 color-preview"
+		style="background-color: {preview_background}"
+	/>
 </main>
 
 <style lang="postcss">
