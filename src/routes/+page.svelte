@@ -233,7 +233,7 @@
 		</div>
 	</div>
 	<div
-		class="rounded-2xl h-40 w-40 rounded-box bg-white mt-10 color-preview shadow-lg"
+		class="rounded-2xl h-40 w-40 rounded-box bg-white mt-10 color-preview shadow-lg hover:shadow-2xl transition-shadow duration-500"
 		style="background-color: {preview_background}"
 	/>
 
