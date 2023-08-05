@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Clipboard } from 'lucide-svelte';
 	import { copy } from 'svelte-copy';
-	import * as namer from 'color-namer';
+	import namer from 'color-namer'
 
 	function rgbToHex(red: number, green: number, blue: number, alpha = 1) {
 		// Convert each component to its hexadecimal representation
@@ -164,7 +164,7 @@
 
 	$: preview_background = parsed_hex ? `${parsed_hex}` : 'white';
 
-	$: name = parsed_hex ? namer(parsed_hex).ntc[0].name : '';
+	$: colour_name = parsed_hex ? namer(parsed_hex).ntc[0].name : '';
 </script>
 
 <main class="flex min-h-screen flex-col items-center p-12 max-w-4xl m-auto">
@@ -237,7 +237,7 @@
 		class="rounded-2xl h-40 w-40 rounded-box bg-white mt-10 color-preview shadow-lg hover:shadow-2xl transition-shadow duration-500"
 		style="background-color: {preview_background}"
 	/>
-	<h2 class="capitalize text-xl pt-2">{name}</h2>
+	<h2 class="capitalize text-xl pt-2">{colour_name}</h2>
 
 	<hr class="mt-8 mb-4 border-gray-300 w-full" />
 	<div class="flex text-sm text-gray-700 text-center justify-between w-full">
