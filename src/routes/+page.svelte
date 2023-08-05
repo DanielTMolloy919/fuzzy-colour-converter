@@ -213,7 +213,7 @@
 		<div use:copy={javascript_rgb} class="relative">
 			<h1 class="mt-3 text-l text-gray-400">For CSS</h1>
 			<div
-				class="text-md px-3 py-2 rounded-lg w-full h-10 bg-white hover:bg-gray-200 transition-colors cursor-pointer flex items-center justify-between"
+				class="text-md px-3 py-2 rounded-lg w-full h-10 bg-gray-300 hover:bg-gray-200 transition-colors cursor-pointer flex items-center justify-between"
 			>
 				{javascript_rgb}
 				<div class="ml-auto">
