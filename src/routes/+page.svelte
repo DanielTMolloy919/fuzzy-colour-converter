@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Clipboard } from 'lucide-svelte';
 	import { copy } from 'svelte-copy';
-	import * as namer from 'color-namer';
+	var namer = require('color-namer');
 
 	function rgbToHex(red: number, green: number, blue: number, alpha = 1) {
 		// Convert each component to its hexadecimal representation
