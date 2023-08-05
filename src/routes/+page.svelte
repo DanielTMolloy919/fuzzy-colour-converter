@@ -188,7 +188,7 @@
 			</div>
 		</div>
 		<div use:copy={parsed_rgb} class="relative">
-			<h1 class="mt-3 text-xl">RGB</h1>
+			<h1 class="mt-3 text-xl uppercase">{javascript_rgb_prefix}</h1>
 			<div
 				class="text-md px-3 py-2 rounded-lg w-full h-10 bg-gray-300 hover:bg-gray-200 transition-colors cursor-pointer flex items-center justify-between"
 			>
@@ -199,7 +199,7 @@
 			</div>
 		</div>
 		<div use:copy={parsed_hsl} class="relative">
-			<h1 class="mt-3 text-xl">HSL</h1>
+			<h1 class="mt-3 text-xl uppercase">{javascript_hsl_prefix}</h1>
 			<div
 				class="text-md px-3 py-2 rounded-lg w-full h-10 bg-gray-300 hover:bg-gray-200 transition-colors cursor-pointer flex items-center justify-between"
 			>
